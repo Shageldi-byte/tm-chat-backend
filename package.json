@@ -17,7 +17,6 @@
     "@types/multer": "^1.4.7",
     "@types/pg": "^8.6.6",
     "bcrypt": "^5.1.0",
-    "blurhash-generator": "^1.0.1",
     "class-transformer": "^0.5.1",
     "class-transformer-validator": "^0.9.1",
     "class-validator": "^0.14.0",

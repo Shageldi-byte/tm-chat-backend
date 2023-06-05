@@ -3,10 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express, Request, Response } from "express";
 import router from "./src/routes/router";
-import swaggerUi from "swagger-ui-express";
 import { Server } from "socket.io";
 import { SOCKET_EVENTS } from "./src/core/constant";
-import { specs } from "./src/docs";
 
 dotenv.config();
 
@@ -17,15 +15,7 @@ app.use('/public', express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({limit: "500mb", extended: true, parameterLimit:500000}));
 app.use('/api',router);
-app.use(
-  "/api-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(undefined, {
-    swaggerOptions: {
-      url: "/swagger.json",
-    },
-  })
-);
+
 
 const port = process.env.PORT;
 

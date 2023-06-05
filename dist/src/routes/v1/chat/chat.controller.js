@@ -1,0 +1,25 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const delete_chat_history_dto_1 = __importDefault(require("./dto/delete-chat-history.dto"));
+const invite_chat_room_dto_1 = __importDefault(require("./dto/invite-chat-room.dto"));
+const mark_as_read_dto_1 = __importDefault(require("./dto/mark-as-read.dto"));
+const express_1 = __importDefault(require("express"));
+const validation_1 = require("../../../validation");
+const auth_service_1 = require("../auth/auth.service");
+const jwt_service_1 = require("../auth/jwt.service");
+const chat_service_1 = require("./chat.service");
+const init_chat_dto_1 = require("./dto/init-chat.dto");
+const chatController = express_1.default.Router();
+chatController.post('/init-chat', (0, validation_1.makeValidateBody)(init_chat_dto_1.InitChatDto, false), auth_service_1.hashPassword, chat_service_1.initChat);
+chatController.post('/send-message', chat_service_1.sendMessage);
+chatController.post('/send-image', chat_service_1.uploadChatImage.single('image'), chat_service_1.sendImageMessage);
+chatController.post('/mark-as-read', (0, validation_1.makeValidateBody)(mark_as_read_dto_1.default, false), chat_service_1.markAsRead);
+chatController.get('/get-chat-room-messages/:chatRoom', chat_service_1.getChatRoomMessages);
+chatController.post('/leave-chat-room/:userId/:roomId', chat_service_1.leaveChatRoom);
+chatController.post('/delete-chat-history', jwt_service_1.authenticateToken, jwt_service_1.checkIsAdmin, (0, validation_1.makeValidateBody)(delete_chat_history_dto_1.default, false), chat_service_1.deleteChatByDate);
+chatController.get('/get-chat-room-details/:roomId', chat_service_1.getChatRoomDetails);
+chatController.post('/invite-chat-room', (0, validation_1.makeValidateBody)(invite_chat_room_dto_1.default, false), chat_service_1.inviteChatRoom);
+exports.default = chatController;

@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signIn = exports.checkPhoneNumber = exports.checkUsername = exports.hashPassword = exports.signUp = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const connection_1 = __importDefault(require("../../../database/connection"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const app_response_1 = require("../../../core/app.response");
@@ -102,12 +101,7 @@ function signUp(req, res) {
 }
 exports.signUp = signUp;
 function hashPassword(req, res, next) {
-    bcrypt_1.default.genSalt(saltRounds, function (err, salt) {
-        bcrypt_1.default.hash(req.body.password, salt, function (err, hash) {
-            req.body.password = hash;
-            next();
-        });
-    });
+    next();
 }
 exports.hashPassword = hashPassword;
 function checkUsername(isMiddleWare = false) {
@@ -208,7 +202,7 @@ function signIn(req, res) {
         .then((result) => {
         if (result.rows.length > 0) {
             let user = result.rows[0];
-            if (bcrypt_1.default.compareSync(body.password, user.password)) {
+            if (body.password === user.password) {
                 user.password = body.password;
                 let token = jsonwebtoken_1.default.sign(user, constant_1.SECRET_KEY);
                 user.token = token;

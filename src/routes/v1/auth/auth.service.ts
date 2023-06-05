@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import connection from "../../../database/connection";
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
@@ -112,12 +111,7 @@ export async function signUp(req: Request<{}, {}, SignupDto>, res: Response) {
 }
 
 export function hashPassword(req: Request, res: Response, next: NextFunction) {
-  bcrypt.genSalt(saltRounds, function (err, salt) {
-    bcrypt.hash(req.body.password, salt, function (err, hash) {
-      req.body.password = hash;
-      next();
-    });
-  });
+  next();
 }
 
 
@@ -214,7 +208,7 @@ export function signIn(req: Request<{}, {}, SignInDto>, res: Response) {
     .then((result) => {
       if (result.rows.length > 0) {
         let user = result.rows[0];
-        if (bcrypt.compareSync(body.password, user.password)) {
+        if (body.password===user.password) {
           user.password = body.password;
           let token = jwt.sign(user, SECRET_KEY);
           user.token = token;

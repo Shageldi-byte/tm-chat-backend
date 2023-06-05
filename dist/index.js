@@ -8,7 +8,6 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const router_1 = __importDefault(require("./src/routes/router"));
-const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const socket_io_1 = require("socket.io");
 const constant_1 = require("./src/core/constant");
 dotenv_1.default.config();
@@ -18,11 +17,6 @@ app.use('/public', express_1.default.static('public'));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ limit: "500mb", extended: true, parameterLimit: 500000 }));
 app.use('/api', router_1.default);
-app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(undefined, {
-    swaggerOptions: {
-        url: "/swagger.json",
-    },
-}));
 const port = process.env.PORT;
 const server = app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at ${port}`);
